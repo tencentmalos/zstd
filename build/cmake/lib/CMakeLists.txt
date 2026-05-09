@@ -137,6 +137,13 @@ if (ZSTD_BUILD_SHARED)
 endif ()
 if (ZSTD_BUILD_STATIC)
     add_library(libzstd_static STATIC ${Sources} ${Headers})
+    if(DEFINED CITRA_USE_UNITY_BUILD AND CITRA_USE_UNITY_BUILD)
+        set_target_properties(libzstd_static PROPERTIES UNITY_BUILD ON)
+        set_source_files_properties(
+            ${DictBuilderSources}
+            PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+        )
+    endif()
     target_include_directories(libzstd_static INTERFACE $<BUILD_INTERFACE:${PUBLIC_INCLUDE_DIRS}>)
     list(APPEND library_targets libzstd_static)
     if (ZSTD_MULTITHREAD_SUPPORT)
